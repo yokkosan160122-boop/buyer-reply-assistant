@@ -197,6 +197,7 @@
       <button
         type="button"
         class="translate-button"
+        onclick="createMeaningPrompt()"
       >
         Buyerの意味を確認
       </button>
@@ -220,6 +221,7 @@
       <button
         type="button"
         class="reply-button"
+        onclick="createReplyPrompt()"
       >
         返信を作る
       </button>
@@ -244,6 +246,7 @@
       <button
         type="button"
         class="copy-button"
+        onclick="copyPrompt()"
       >
         指示文をコピー
       </button>
@@ -255,6 +258,170 @@
     </div>
 
   </main>
+
+  <script>
+
+    function showError(message) {
+      const error = document.getElementById("error");
+
+      error.textContent = message;
+      error.style.display = "block";
+
+      document.getElementById("result").style.display = "none";
+    }
+
+
+    function showPrompt(title, prompt) {
+      const error = document.getElementById("error");
+      const result = document.getElementById("result");
+
+      error.style.display = "none";
+
+      document.getElementById("resultTitle").textContent = title;
+
+      document.getElementById("promptOutput").textContent = prompt;
+
+      result.style.display = "block";
+
+      result.scrollIntoView({
+        behavior: "smooth",
+        block: "start"
+      });
+    }
+
+
+    function createMeaningPrompt() {
+
+      const buyerMessage =
+        document.getElementById("buyerMessage").value.trim();
+
+      if (!buyerMessage) {
+        showError(
+          "Buyerからのメッセージを入力してください。"
+        );
+        return;
+      }
+
+      const prompt = `以下はeBayの取引でBuyerから届いたメッセージです。
+
+【Buyerメッセージ】
+${buyerMessage}
+
+このメッセージについて、次の2項目だけを日本語で簡潔に説明してください。
+
+① 日本語訳
+自然な日本語に訳してください。
+
+② Buyerが確認したいこと
+Buyerが何を質問・確認しているのかを簡潔に説明してください。
+
+【重要ルール】
+・Buyerの購入意思や感情を勝手に断定しない
+・書かれていない事実を追加しない
+・事実と推測を分ける
+・価格、商品状態、発送、送料、関税、返品条件など、入力されていない情報を勝手に補完しない`;
+
+      showPrompt(
+        "Buyerの意味を確認",
+        prompt
+      );
+    }
+
+
+    function createReplyPrompt() {
+
+      const buyerMessage =
+        document.getElementById("buyerMessage").value.trim();
+
+      const sellerIntent =
+        document.getElementById("sellerIntent").value.trim();
+
+      if (!buyerMessage) {
+        showError(
+          "Buyerからのメッセージ・取引状況を入力してください。"
+        );
+        return;
+      }
+
+      if (!sellerIntent) {
+        showError(
+          "どう対応したいかを入力してください。"
+        );
+        return;
+      }
+
+      const prompt = `あなたはeBay Seller向けのBuyer返信アシスタントです。
+
+以下の取引情報とSellerの希望だけを根拠に、Buyerへ送る返信を作成してください。
+
+【Buyerからのメッセージ・取引状況】
+${buyerMessage}
+
+【Sellerがどう対応したいか】
+${sellerIntent}
+
+【重要ルール】
+・入力されていない価格を勝手に作らない
+・入力されていない商品状態を勝手に作らない
+・付属品、在庫、発送日、配送日数、到着予定、送料、関税、税金、DDP/DDU、返品条件などを勝手に追加しない
+・不明なことは不明として扱う
+・Buyerの購入意思や感情を勝手に断定しない
+・事実と推測を分ける
+・Sellerが入力していない約束や条件を追加しない
+・成約を優先するあまりSellerに不利な条件を勝手に約束しない
+・英語は丁寧で自然にする
+・返信英文は必要以上に長くしない
+
+次の4項目だけを、この順番で出力してください。
+
+① 取引内容の整理
+Buyerメッセージがある場合は自然な日本語で意味を説明。
+Seller側から連絡するケースでは現在の状況を簡潔に整理。
+
+② どう返すか
+取引状況とSellerの希望を踏まえた簡潔な対応方針
+
+③ 送信用英文
+そのままeBayへコピーできる短く自然な英文
+
+④ 日本語訳
+③の英文の意味をSellerが確認できる自然な日本語訳`;
+
+      showPrompt(
+        "返信作成用の指示文",
+        prompt
+      );
+    }
+
+
+    async function copyPrompt() {
+
+      const text =
+        document.getElementById("promptOutput").textContent;
+
+      const button =
+        document.querySelector(".copy-button");
+
+      try {
+
+        await navigator.clipboard.writeText(text);
+
+        button.textContent = "コピーしました ✓";
+
+        setTimeout(() => {
+          button.textContent = "指示文をコピー";
+        }, 1500);
+
+      } catch (e) {
+
+        alert(
+          "コピーできませんでした。指示文を長押ししてコピーしてください。"
+        );
+
+      }
+    }
+
+  </script>
 
 </body>
 </html>
