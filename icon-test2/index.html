@@ -166,7 +166,95 @@
 </head>
 
 <body>
-  <h1>Icon Test 2</h1>
-  <p>本体CSSを載せたアイコンテスト</p>
+
+  <header class="header">
+    <h1>Buyer Reply Assistant</h1>
+    <p>eBay Buyerへの返信を、迷わずシンプルに。</p>
+  </header>
+
+  <main class="container">
+
+    <div class="card">
+
+      <div id="error" class="error"></div>
+
+      <div class="field">
+        <label for="buyerMessage">
+          ① Buyerからのメッセージ・取引状況
+        </label>
+
+        <p class="hint">
+          Buyerの英文をそのまま貼り付けます。
+          Seller側から連絡する場合は、現在の取引状況を日本語で入力できます。
+        </p>
+
+        <textarea
+          id="buyerMessage"
+          placeholder="例：What's the lowest you'll go on this watch?"
+        ></textarea>
+      </div>
+
+      <button
+        type="button"
+        class="translate-button"
+      >
+        Buyerの意味を確認
+      </button>
+
+      <div class="field">
+        <label for="sellerIntent">
+          ② どう対応したい？
+        </label>
+
+        <p class="hint">
+          Buyerの意味を確認したうえで、
+          あなたが伝えたいこと・条件を日本語で入力します。
+        </p>
+
+        <textarea
+          id="sellerIntent"
+          placeholder="例：$350なら販売したい"
+        ></textarea>
+      </div>
+
+      <button
+        type="button"
+        class="reply-button"
+      >
+        返信を作る
+      </button>
+
+    </div>
+
+    <section id="result" class="result">
+
+      <h2 id="resultTitle">
+        ChatGPTに渡す指示文
+      </h2>
+
+      <p id="resultDescription">
+        下の内容をコピーしてChatGPTへ送ってください。
+      </p>
+
+      <div
+        id="promptOutput"
+        class="prompt-box"
+      ></div>
+
+      <button
+        type="button"
+        class="copy-button"
+      >
+        指示文をコピー
+      </button>
+
+    </section>
+
+    <div class="footer">
+      Buyer Reply Assistant V0
+    </div>
+
+  </main>
+
 </body>
 </html>
